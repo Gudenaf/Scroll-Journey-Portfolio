@@ -249,6 +249,7 @@ body {
 
 :root {
   --bg-primary: #E8331A;
+  --anim-dur: 12s;
 }
 
 .start {
@@ -407,27 +408,12 @@ body {
 .circle {
   position: sticky;
   bottom: 200px;
-  left: 38%;
+  left: 35%;
   width: 100%;
   max-width: 390px;
   aspect-ratio: 1/1;
   z-index: 5;
   margin: 0 0 30px 0;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  gap: 22px;
-  text-align: center;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
 }
 
 .circle:before {
@@ -445,6 +431,32 @@ body {
   border: 4px dashed rgba(0, 0, 0, 0.6);
 }
 
+.circle__text-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  gap: 22px;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
+
 .circle__number {
   max-width: 18.75rem;
   font-size: 4.375rem;
@@ -452,7 +464,53 @@ body {
 }
 
 .circle__number:after {
-  content: "> 1,5 млн";
+  content: "";
+  -webkit-animation: change-number var(--anim-dur) linear infinite;
+          animation: change-number var(--anim-dur) linear infinite;
+}
+
+@-webkit-keyframes change-number {
+  0% {
+    content: "200";
+  }
+
+  30% {
+    content: "300";
+  }
+
+  50% {
+    content: "5000";
+  }
+
+  75% {
+    content: "> 1,5 млн";
+  }
+
+  100% {
+    content: "> 1,5 млн";
+  }
+}
+
+@keyframes change-number {
+  0% {
+    content: "200";
+  }
+
+  30% {
+    content: "300";
+  }
+
+  50% {
+    content: "5000";
+  }
+
+  75% {
+    content: "> 1,5 млн";
+  }
+
+  100% {
+    content: "> 1,5 млн";
+  }
 }
 
 .circle__desc {
@@ -460,6 +518,57 @@ body {
   font-weight: 400;
   max-width: 14.375rem;
   font-size: 1.625rem;
+  line-height: 1.3;
+}
+
+.circle__desc:after {
+  content: "авиаперевозчиков";
+  -webkit-animation: change-desc var(--anim-dur) linear infinite;
+          animation: change-desc var(--anim-dur) linear infinite;
+}
+
+@-webkit-keyframes change-desc {
+  0% {
+    content: "авиаперевозчиков";
+  }
+
+  30% {
+    content: "ж/д перевозчиков";
+  }
+
+  50% {
+    content: "автобусных перевозчиков";
+  }
+
+  75% {
+    content: "билетов в месяц продается через нашу систему";
+  }
+
+  100% {
+    content: "билетов в месяц продается через нашу систему";
+  }
+}
+
+@keyframes change-desc {
+  0% {
+    content: "авиаперевозчиков";
+  }
+
+  30% {
+    content: "ж/д перевозчиков";
+  }
+
+  50% {
+    content: "автобусных перевозчиков";
+  }
+
+  75% {
+    content: "билетов в месяц продается через нашу систему";
+  }
+
+  100% {
+    content: "билетов в месяц продается через нашу систему";
+  }
 }
 
 .circle__svg-wrapper {
@@ -481,8 +590,8 @@ body {
   width: 100%;
   border-radius: 50%;
   aspect-ratio: 1/1;
-  -webkit-animation: moving-progress 12s linear infinite;
-          animation: moving-progress 12s linear infinite;
+  -webkit-animation: moving-progress var(--anim-dur) linear infinite;
+          animation: moving-progress var(--anim-dur) linear infinite;
 }
 
 .circle__moving:after {
@@ -544,8 +653,8 @@ body {
 .conic-mask {
   border-radius: 50%;
   background: conic-gradient(var(--c) var(--a), var(--w) 0deg);
-  -webkit-animation: conic-progress 12s linear infinite;
-          animation: conic-progress 12s linear infinite;
+  -webkit-animation: conic-progress var(--anim-dur) linear infinite;
+          animation: conic-progress var(--anim-dur) linear infinite;
   rotate: 90deg;
 }
 
