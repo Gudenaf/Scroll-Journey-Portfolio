@@ -17,9 +17,9 @@
 }
 
 @font-face {
-  font-family: Roboto;
+  font-family: RussianRail G Pro Extend;
   font-display: swap;
-  src: url("../fonts/Roboto-Regular.woff2") format("woff2"), url("../fonts/Roboto-Regular.woff") format("woff");
+  src: url("../fonts/RussianRail G Pro Extend.woff2") format("woff2"), url("../fonts/RussianRail G Pro Extend.woff") format("woff");
   font-weight: 400;
   font-style: normal;
 }
@@ -27,8 +27,16 @@
 @font-face {
   font-family: RussianRail G Pro;
   font-display: swap;
-  src: url("../fonts/RussianRail G Pro-Bold.woff2") format("woff2"), url("../fonts/RussianRail G Pro-Bold.woff") format("woff");
-  font-weight: 700;
+  src: url("../fonts/RussianRail G Pro-Regular.woff2") format("woff2"), url("../fonts/RussianRail G Pro-Regular.woff") format("woff");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Roboto;
+  font-display: swap;
+  src: url("../fonts/Roboto-Regular.woff2") format("woff2"), url("../fonts/Roboto-Regular.woff") format("woff");
+  font-weight: 400;
   font-style: normal;
 }
 
@@ -43,8 +51,8 @@
 @font-face {
   font-family: RussianRail G Pro;
   font-display: swap;
-  src: url("../fonts/RussianRail G Pro-Regular.woff2") format("woff2"), url("../fonts/RussianRail G Pro-Regular.woff") format("woff");
-  font-weight: 400;
+  src: url("../fonts/RussianRail G Pro-Bold.woff2") format("woff2"), url("../fonts/RussianRail G Pro-Bold.woff") format("woff");
+  font-weight: 700;
   font-style: normal;
 }
 
@@ -70,7 +78,7 @@ body {
 body {
   color: #000;
   line-height: 1;
-  font-family: RussianRail G Pro, sans-serif;
+  font-family: RussianRail G Pro Extend, sans-serif;
   font-size: 1.5rem;
   -ms-text-size-adjust: 100%;
   -moz-text-size-adjust: 100%;
@@ -82,7 +90,7 @@ body {
 input,
 button,
 textarea {
-  font-family: RussianRail G Pro, sans-serif;
+  font-family: RussianRail G Pro Extend, sans-serif;
   font-size: inherit;
 }
 
@@ -142,7 +150,6 @@ body {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  overflow: hidden;
 }
 
 .wrapper > main {
@@ -240,6 +247,10 @@ body {
 }
 */
 
+:root {
+  --bg-primary: #E8331A;
+}
+
 .start {
   background: #F5F5F5;
   padding: 100px 0 130px 0;
@@ -247,14 +258,21 @@ body {
 
 .start__container {
   position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
 }
 
 .start__title {
   font-size: 3rem;
-  max-width: 60rem;
+  max-width: 67rem;
   line-height: 1.2;
   font-weight: 400;
-  font-family: "RussianRail G Pro Extended", sans-serif;
+  font-family: RussianRail G Pro Extend, sans-serif;
   margin: 0 0 94px 0;
 }
 
@@ -265,7 +283,7 @@ body {
       -ms-transform: translateX(-10px);
           transform: translateX(-10px);
   color: #ffffff;
-  background: #E8331A;
+  background: var(--bg-primary);
   vertical-align: middle;
   margin: 10px 0 0 0;
 }
@@ -283,6 +301,7 @@ body {
   padding: 0 12px 0 0;
   margin: 0 28px 60px 0;
   position: relative;
+  max-width: 420px;
 }
 
 .start__text-bold:after {
@@ -301,10 +320,13 @@ body {
 .start__item {
   background: url("../img/rectangle.svg") no-repeat center center/cover;
   padding: 38px 88px 38px 58px;
-  margin: 0 0 94px 0;
+  margin: 0 150px 94px 0;
   max-width: 45.9375rem;
   opacity: 0.6;
+  right: 0;
   position: relative;
+  -ms-flex-item-align: end;
+      align-self: flex-end;
 }
 
 .start__item svg {
@@ -331,7 +353,7 @@ body {
   content: "";
   width: 2.1875rem;
   height: 2.1875rem;
-  background: #E8331A;
+  background: var(--bg-primary);
   border-radius: 50%;
   z-index: 5;
 }
@@ -360,27 +382,37 @@ body {
 }
 
 .start__img {
+  -webkit-transform: rotate(355deg);
+      -ms-transform: rotate(355deg);
+          transform: rotate(355deg);
+  width: 100%;
   position: absolute;
   left: 0;
   bottom: 0;
-  -webkit-transform: rotate(345deg);
-      -ms-transform: rotate(345deg);
-          transform: rotate(345deg);
-  height: 15.875rem;
-  max-width: 15.875rem;
+  max-width: 14.625rem;
+  padding: 0 0 234px 0;
+  margin: 0 0 0 34px;
 }
 
 .start__img img {
-  -o-object-fit: contain;
-     object-fit: contain;
+  top: 0;
+  left: 0;
+  position: absolute;
+  -o-object-fit: cover;
+     object-fit: cover;
   width: 100%;
   height: 100%;
 }
 
 .circle {
-  border: 4px dashed rgba(0, 0, 0, 0.6);
-  width: 24.375rem;
-  height: 24.375rem;
+  position: sticky;
+  bottom: 200px;
+  left: 38%;
+  width: 100%;
+  max-width: 390px;
+  aspect-ratio: 1/1;
+  z-index: 5;
+  margin: 0 0 30px 0;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -393,21 +425,146 @@ body {
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.circle:before {
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  width: calc(100% - 3px);
+  z-index: -1;
+  content: "";
+  position: absolute;
+  aspect-ratio: 1/1;
   border-radius: 50%;
-  padding: 0 30px;
-  stroke-width: 4px;
-  stroke-dasharray: 160px;
-  stroke-dashoffset: 160px;
-  -webkit-transition: stroke-dashoffset 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-  -o-transition: stroke-dashoffset 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-  transition: stroke-dashoffset 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+  border: 4px dashed rgba(0, 0, 0, 0.6);
 }
 
 .circle__number {
+  max-width: 18.75rem;
   font-size: 4.375rem;
   font-family: Muller, sans-serif;
 }
 
+.circle__number:after {
+  content: "> 1,5 млн";
+}
+
 .circle__desc {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+  max-width: 14.375rem;
   font-size: 1.625rem;
+}
+
+.circle__svg-wrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  z-index: -1;
+}
+
+.circle__svg circle {
+  fill: #F5F5F5;
+  -webkit-clip-path: circle(calc(50% - 4px) at 50% 50%);
+          clip-path: circle(calc(50% - 4px) at 50% 50%);
+}
+
+.circle__moving {
+  position: absolute;
+  rotate: -90deg;
+  width: 100%;
+  border-radius: 50%;
+  aspect-ratio: 1/1;
+  -webkit-animation: moving-progress 12s linear infinite;
+          animation: moving-progress 12s linear infinite;
+}
+
+.circle__moving:after {
+  content: "";
+  position: absolute;
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  width: 2.875rem;
+  background: var(--bg-primary);
+  right: 0;
+  top: 50%;
+  -webkit-transform: translate(18px, -50%);
+      -ms-transform: translate(18px, -50%);
+          transform: translate(18px, -50%);
+}
+
+@-webkit-keyframes moving-progress {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes moving-progress {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@property --a {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@property --c {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #e8331a;
+}
+
+@property --w {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: rgba(255, 192, 203, 0);
+}
+
+.conic-mask {
+  border-radius: 50%;
+  background: conic-gradient(var(--c) var(--a), var(--w) 0deg);
+  -webkit-animation: conic-progress 12s linear infinite;
+          animation: conic-progress 12s linear infinite;
+  rotate: 90deg;
+}
+
+@-webkit-keyframes conic-progress {
+  from {
+    --a: 0deg;
+  }
+
+  to {
+    --a: 360deg;
+  }
+}
+
+@keyframes conic-progress {
+  from {
+    --a: 0deg;
+  }
+
+  to {
+    --a: 360deg;
+  }
 }
