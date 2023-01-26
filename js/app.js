@@ -3108,15 +3108,133 @@
             destroy
         });
     }
+    function effect_init_effectInit(params) {
+        const {effect, swiper, on, setTranslate, setTransition, overwriteParams, perspective, recreateShadows, getEffectParams} = params;
+        on("beforeInit", (() => {
+            if (swiper.params.effect !== effect) return;
+            swiper.classNames.push(`${swiper.params.containerModifierClass}${effect}`);
+            if (perspective && perspective()) swiper.classNames.push(`${swiper.params.containerModifierClass}3d`);
+            const overwriteParamsResult = overwriteParams ? overwriteParams() : {};
+            Object.assign(swiper.params, overwriteParamsResult);
+            Object.assign(swiper.originalParams, overwriteParamsResult);
+        }));
+        on("setTranslate", (() => {
+            if (swiper.params.effect !== effect) return;
+            setTranslate();
+        }));
+        on("setTransition", ((_s, duration) => {
+            if (swiper.params.effect !== effect) return;
+            setTransition(duration);
+        }));
+        on("transitionEnd", (() => {
+            if (swiper.params.effect !== effect) return;
+            if (recreateShadows) {
+                if (!getEffectParams || !getEffectParams().slideShadows) return;
+                swiper.slides.each((slideEl => {
+                    const $slideEl = swiper.$(slideEl);
+                    $slideEl.find(".swiper-slide-shadow-top, .swiper-slide-shadow-right, .swiper-slide-shadow-bottom, .swiper-slide-shadow-left").remove();
+                }));
+                recreateShadows();
+            }
+        }));
+        let requireUpdateOnVirtual;
+        on("virtualUpdate", (() => {
+            if (swiper.params.effect !== effect) return;
+            if (!swiper.slides.length) requireUpdateOnVirtual = true;
+            requestAnimationFrame((() => {
+                if (requireUpdateOnVirtual && swiper.slides && swiper.slides.length) {
+                    setTranslate();
+                    requireUpdateOnVirtual = false;
+                }
+            }));
+        }));
+    }
+    function effect_target_effectTarget(effectParams, $slideEl) {
+        if (effectParams.transformEl) return $slideEl.find(effectParams.transformEl).css({
+            "backface-visibility": "hidden",
+            "-webkit-backface-visibility": "hidden"
+        });
+        return $slideEl;
+    }
+    function effect_virtual_transition_end_effectVirtualTransitionEnd({swiper, duration, transformEl, allSlides}) {
+        const {slides, activeIndex, $wrapperEl} = swiper;
+        if (swiper.params.virtualTranslate && 0 !== duration) {
+            let eventTriggered = false;
+            let $transitionEndTarget;
+            if (allSlides) $transitionEndTarget = transformEl ? slides.find(transformEl) : slides; else $transitionEndTarget = transformEl ? slides.eq(activeIndex).find(transformEl) : slides.eq(activeIndex);
+            $transitionEndTarget.transitionEnd((() => {
+                if (eventTriggered) return;
+                if (!swiper || swiper.destroyed) return;
+                eventTriggered = true;
+                swiper.animating = false;
+                const triggerEvents = [ "webkitTransitionEnd", "transitionend" ];
+                for (let i = 0; i < triggerEvents.length; i += 1) $wrapperEl.trigger(triggerEvents[i]);
+            }));
+        }
+    }
+    function EffectFade({swiper, extendParams, on}) {
+        extendParams({
+            fadeEffect: {
+                crossFade: false,
+                transformEl: null
+            }
+        });
+        const setTranslate = () => {
+            const {slides} = swiper;
+            const params = swiper.params.fadeEffect;
+            for (let i = 0; i < slides.length; i += 1) {
+                const $slideEl = swiper.slides.eq(i);
+                const offset = $slideEl[0].swiperSlideOffset;
+                let tx = -offset;
+                if (!swiper.params.virtualTranslate) tx -= swiper.translate;
+                let ty = 0;
+                if (!swiper.isHorizontal()) {
+                    ty = tx;
+                    tx = 0;
+                }
+                const slideOpacity = swiper.params.fadeEffect.crossFade ? Math.max(1 - Math.abs($slideEl[0].progress), 0) : 1 + Math.min(Math.max($slideEl[0].progress, -1), 0);
+                const $targetEl = effect_target_effectTarget(params, $slideEl);
+                $targetEl.css({
+                    opacity: slideOpacity
+                }).transform(`translate3d(${tx}px, ${ty}px, 0px)`);
+            }
+        };
+        const setTransition = duration => {
+            const {transformEl} = swiper.params.fadeEffect;
+            const $transitionElements = transformEl ? swiper.slides.find(transformEl) : swiper.slides;
+            $transitionElements.transition(duration);
+            effect_virtual_transition_end_effectVirtualTransitionEnd({
+                swiper,
+                duration,
+                transformEl,
+                allSlides: true
+            });
+        };
+        effect_init_effectInit({
+            effect: "fade",
+            swiper,
+            on,
+            setTranslate,
+            setTransition,
+            overwriteParams: () => ({
+                slidesPerView: 1,
+                slidesPerGroup: 1,
+                watchSlidesProgress: true,
+                spaceBetween: 0,
+                virtualTranslate: !swiper.params.cssMode
+            })
+        });
+    }
     function initSliders() {
         if (document.querySelector(".swiper")) new core(".swiper", {
-            modules: [ Navigation ],
-            observer: true,
-            observeParents: true,
+            modules: [ Navigation, EffectFade ],
+            observer: false,
+            observeParents: false,
             slidesPerView: 1,
-            spaceBetween: 0,
+            spaceBetween: 20,
             autoHeight: true,
             speed: 800,
+            effect: "fade",
             navigation: {
                 prevEl: ".swiper-button-prev",
                 nextEl: ".swiper-button-next"
@@ -3147,7 +3265,6 @@
     gsap.to(".start__title", {
         scrollTrigger: {
             trigger: ".start__title",
-            toggleActions: "play none reverse reset",
             start: "top 100px",
             end: "150% center"
         },
@@ -3158,7 +3275,6 @@
     gsap.to(".start__item", {
         scrollTrigger: {
             trigger: ".start__item",
-            toggleActions: "play none reverse reset",
             start: "top 175px",
             end: "150% center"
         },
@@ -3166,36 +3282,82 @@
         duration: 1,
         opacity: 1
     });
-    var tl = gsap.timeline();
-    tl.to(".start-rails__icon", {
-        x: 688,
+    gsap.to(".train", {
+        x: 674,
+        y: -5,
         scrollTrigger: {
-            markers: true,
             trigger: ".start",
-            start: "top top",
-            end: "100px top",
-            scrub: true
+            start: "top top"
         }
     });
-    tl.to(".start-rails__icon", {
-        y: 1e3,
+    gsap.to(".train", {
+        y: 480,
         scrollTrigger: {
-            markers: true,
             trigger: ".start-rails",
-            start: "-100px top",
-            end: "400px top",
-            scrub: true
+            start: "100px top"
         }
     });
-    tl.to(".start-rails__icon", {
-        x: 148,
+    gsap.to(".bus", {
+        x: 652,
+        y: 1046,
         scrollTrigger: {
-            markers: true,
-            trigger: ".start-rails",
-            start: "-200px center",
-            end: "-800px center",
-            scrub: true
+            trigger: ".start__item",
+            start: "top top"
         }
+    });
+    gsap.to(".bus", {
+        x: 824,
+        scrollTrigger: {
+            trigger: ".circle",
+            start: "bottom top"
+        }
+    });
+    let script_scroll = gsap.utils.toArray(".start");
+    script_scroll.forEach((section => {
+        gsap.to(section, {
+            xPercent: -100,
+            duration: 5,
+            x: () => window.innerWidth,
+            ease: "none",
+            scrollTrigger: {
+                trigger: section,
+                start: "bottom bottom",
+                markers: true,
+                end: () => `+=${2 * window.innerWidth}`,
+                scrub: true,
+                pin: true,
+                invalidateOnRefresh: true
+            }
+        });
+    }));
+    gsap.registerPlugin(MotionPathPlugin);
+    gsap.to(".ship", {
+        duration: 2,
+        scrollTrigger: {
+            trigger: ".ship",
+            start: "bottom top"
+        },
+        motionPath: {
+            path: "#path",
+            align: "#path",
+            alignOrigin: [ .5, .5 ],
+            start: 0,
+            end: .6
+        }
+    });
+    gsap.to(".airplane", {
+        scrollTrigger: {
+            trigger: ".airplane",
+            start: "1200px top"
+        },
+        motionPath: {
+            path: "#path",
+            align: "#path",
+            alignOrigin: [ .5, .5 ],
+            start: .6
+        },
+        transformOrigin: "50% 50%",
+        duration: 2
     });
     window["FLS"] = true;
     isWebp();
