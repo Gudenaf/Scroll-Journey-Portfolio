@@ -251,7 +251,7 @@ body {
 
 .slider-curve {
   position: absolute;
-  bottom: 303px;
+  bottom: 118px;
   max-width: 1600px;
   -webkit-transform: translate(1460px, 0);
       -ms-transform: translate(1460px, 0);
@@ -356,6 +356,9 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: end;
+      -ms-flex-align: end;
+          align-items: flex-end;
   padding: 200px 0 130px 0;
 }
 
@@ -742,14 +745,11 @@ body {
 }
 
 .team {
-  -webkit-transform: translate(0, -140px);
-      -ms-transform: translate(0, -140px);
-          transform: translate(0, -140px);
   max-width: 90rem;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  padding: 0 20px 120px 20px;
+  padding: 0 20px 86px 20px;
   margin: 0;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
