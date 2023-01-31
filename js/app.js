@@ -3263,11 +3263,6 @@
         opacity: 1
     });
     gsap.to(".start__title", {
-        scrollTrigger: {
-            trigger: ".start__title",
-            start: "top 100px",
-            end: "150% center"
-        },
         y: 0,
         duration: 1,
         opacity: 1
@@ -3275,7 +3270,7 @@
     gsap.to(".start__item", {
         scrollTrigger: {
             trigger: ".start__item",
-            start: "top 175px",
+            start: "-200px 175px",
             end: "150% center"
         },
         x: 0,
@@ -3322,11 +3317,10 @@
             scrollTrigger: {
                 trigger: section,
                 start: "bottom bottom",
-                markers: true,
-                end: () => `+=${2 * window.innerWidth}`,
                 scrub: true,
                 pin: true,
-                invalidateOnRefresh: true
+                invalidateOnRefresh: true,
+                end: () => `+=${2 * window.innerWidth}`
             }
         });
     }));
@@ -3354,7 +3348,8 @@
             path: "#path",
             align: "#path",
             alignOrigin: [ .5, .5 ],
-            start: .6
+            start: .6,
+            end: .98
         },
         transformOrigin: "50% 50%",
         duration: 2
